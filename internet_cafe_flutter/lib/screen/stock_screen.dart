@@ -3,6 +3,7 @@ import '../data/stock_data.dart';
 import '../models/stock_item.dart';
 import '../widgets/new_item.dart';
 import '../widgets/stock_list_tile.dart';
+import '../data/mode.dart';
 
 class StockScreen extends StatelessWidget {
   const StockScreen({super.key});
@@ -34,7 +35,7 @@ class _StocklistState extends State<Stocklist> {
       context,
       MaterialPageRoute(
         builder: (context) => NewItem(
-          mode: items == null ? ItemMode.input : ItemMode.edit,
+          mode: items == null ? Mode.input : Mode.edit,
           items: items,
         ),
       ),
@@ -51,7 +52,7 @@ class _StocklistState extends State<Stocklist> {
     }
   }
 
-  // Toggle between normal and selection mode
+
   void _toggleSelectionMode() {
     setState(() {
       _mode = _mode == Mode.normal ? Mode.selection : Mode.normal;
@@ -74,7 +75,7 @@ class _StocklistState extends State<Stocklist> {
     }
   }
 
-  // Remove selected items from the list
+
   void _removeSelectedItem() {
     setState(() {
       _lastRemovedItems = [...selectedItem];

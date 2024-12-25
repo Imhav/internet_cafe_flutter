@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/stock_item.dart';
+import '../data/mode.dart';
 
-enum Mode { normal, selection }
+
 
 class StockListTile extends StatelessWidget {
   final StockItem items;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../models/seat.dart';
 import '../data/seat_data.dart';
-
-enum Mode { normal, selection }
+import '../data/mode.dart';
 
 class SeatSelectionScreen extends StatefulWidget {
   const SeatSelectionScreen({super.key});
@@ -15,6 +15,9 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   Mode _mode = Mode.normal;
   final List<Seat> selectedSeats = [];
   final TextEditingController _seatController = TextEditingController();
+  final FocusNode _seatFocusNode = FocusNode();
+  String _filter = '';
+  Timer? _debounce;
 
   List<Seat> get unselectedSeats =>
       dummySeats.where((seat) => !seat.isOccupied).toList();
@@ -28,7 +31,45 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
     return dummySeats;
   }
 
-  String _filter = '';
+  Future<void> _updateSeatsAsync(int newSeatCount) async {
+    if (newSeatCount > dummySeats.length) {
+      // Add new seats
+      dummySeats.addAll(
+        List.generate(
+          newSeatCount - dummySeats.length,
+          (index) => Seat(
+            id: 's${dummySeats.length + index + 1}',
+            name: 'Seat ${dummySeats.length + index + 1}',
+          ),
+        ),
+      );
+    } else if (newSeatCount < dummySeats.length) {
+      // Remove extra seats
+      dummySeats.removeRange(newSeatCount, dummySeats.length);
+    }
+
+    // Recreate and update the seat list
+    final List<Seat> updatedSeats = List.generate(newSeatCount, (index) {
+      return Seat(
+        id: 's${index + 1}',
+        name: 'Seat ${index + 1}',
+        isOccupied: index < dummySeats.length && dummySeats[index].isOccupied,
+      );
+    });
+
+    setState(() {
+      dummySeats.clear();
+      dummySeats.addAll(updatedSeats);
+    });
+  }
+
+  void updateTotalSeats(String value) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final int newSeatCount = int.tryParse(value) ?? dummySeats.length;
+      _updateSeatsAsync(newSeatCount);
+    });
+  }
 
   void _toggleSeatOccupancy(Seat seat) {
     setState(() {
@@ -42,13 +83,6 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
       if (_mode == Mode.normal) {
         selectedSeats.clear();
       }
-    });
-  }
-
-  void _removeSelectedSeats() {
-    setState(() {
-      dummySeats.removeWhere((seat) => selectedSeats.contains(seat));
-      _toggleSelectionMode();
     });
   }
 
@@ -72,22 +106,25 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
     });
   }
 
-  void updateTotalSeats(String value) {
-    final int newSeatCount = int.tryParse(value) ?? 0;
-    if (newSeatCount > dummySeats.length) {
-      for (int i = dummySeats.length; i < newSeatCount; i++) {
-        dummySeats.add(Seat(id: 's${i + 1}', name: 'Seat ${i + 1}'));
-      }
-    } else if (newSeatCount < dummySeats.length) {
-      dummySeats.removeRange(newSeatCount, dummySeats.length);
-    }
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     _seatController.text = dummySeats.length.toString();
+    _seatFocusNode.addListener(() {
+      if (!_seatFocusNode.hasFocus) {
+        final int newSeatCount =
+            int.tryParse(_seatController.text) ?? dummySeats.length;
+        _updateSeatsAsync(newSeatCount);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _seatController.dispose();
+    _seatFocusNode.dispose();
+    _debounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -98,10 +135,6 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
             ? 'Seats Selection'
             : '${dummySeats.length - unselectedSeats.length} Seats Selected'),
         actions: [
-          if (_mode == Mode.selection)
-            IconButton(
-                onPressed: _removeSelectedSeats,
-                icon: const Icon(Icons.remove)),
           if (_mode == Mode.normal)
             IconButton(
               onPressed: _toggleSelectionMode,
@@ -111,7 +144,8 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
         leading: _mode == Mode.selection
             ? IconButton(
                 onPressed: _toggleSelectionMode,
-                icon: const Icon(Icons.arrow_back))
+                icon: const Icon(Icons.arrow_back),
+              )
             : null,
       ),
       body: Padding(
@@ -121,15 +155,15 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF181818),
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              decoration: const BoxDecoration(
+                color: Color(0xFF181818),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black,
                     spreadRadius: 5,
                     blurRadius: 10,
-                    offset: const Offset(0, 3),
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),
@@ -154,6 +188,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
                           ),
                           onChanged: updateTotalSeats,
                           style: const TextStyle(color: Colors.white),
+                          focusNode: _seatFocusNode,
                         ),
                       ),
                     ],

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/stock_item.dart';
 import '../models/stock_type.dart';
-
-enum ItemMode { input, edit }
+import '../data/mode.dart'; 
 
 class NewItem extends StatefulWidget {
-  final ItemMode mode;
+  final Mode mode; 
   final StockItem? items;
   const NewItem({super.key, required this.mode, required this.items});
 
@@ -25,7 +24,7 @@ class _NewItemState extends State<NewItem> {
 
   @override
   void initState() {
-    if (widget.mode == ItemMode.edit) {
+    if (widget.mode == Mode.edit) { 
       _enteredName = widget.items!.name;
       _enterQuantity = widget.items!.quantity;
       _itemTypes = widget.items!.type;
@@ -38,10 +37,10 @@ class _NewItemState extends State<NewItem> {
   }
 
   void _saveItem(BuildContext context) {
-    // 1 - Validate the form
+   
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
-      // 2 - Save the form to get last entered values
+      
       _formKey.currentState!.save();
 
       final passedData = StockItem(
@@ -156,7 +155,7 @@ class _NewItemState extends State<NewItem> {
                   ),
                   ElevatedButton(
                     onPressed: () => _saveItem(context),
-                    child: widget.mode == ItemMode.input
+                    child: widget.mode == Mode.input
                         ? const Text("Add Item")
                         : const Text("Update Item"),
                   )
