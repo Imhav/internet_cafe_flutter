@@ -22,12 +22,12 @@ class NavigationScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF181818),
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black,
                   spreadRadius: 5,
                   blurRadius: 10,
-                  offset: const Offset(0, 3),
+                  offset: Offset(0, 3),
                 ),
               ],
             ),
@@ -63,7 +63,7 @@ class NavigationScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     elevation: 20,
                     shadowColor:
-                        const Color.fromARGB(255, 24, 20, 48).withOpacity(1.0),
+                        const Color.fromARGB(255, 24, 20, 48),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
@@ -83,7 +83,7 @@ class NavigationScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     elevation: 20,
                     shadowColor:
-                        const Color.fromARGB(255, 24, 20, 48).withOpacity(1.0),
+                        const Color.fromARGB(255, 24, 20, 48),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),

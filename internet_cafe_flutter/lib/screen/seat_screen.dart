@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/seat.dart';
 import '../data/seat_data.dart';
+
 enum Mode { normal, selection }
 
 class SeatSelectionScreen extends StatefulWidget {

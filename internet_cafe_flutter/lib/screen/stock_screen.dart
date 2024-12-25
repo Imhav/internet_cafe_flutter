@@ -78,7 +78,8 @@ class _StocklistState extends State<Stocklist> {
   void _removeSelectedItem() {
     setState(() {
       _lastRemovedItems = [...selectedItem];
-      _lastRemovedIndices = selectedItem.map((item) => inStockItems.indexOf(item)).toList();
+      _lastRemovedIndices =
+          selectedItem.map((item) => inStockItems.indexOf(item)).toList();
 
       inStockItems.removeWhere((item) => selectedItem.contains(item));
       _toggleSelectionMode();
@@ -126,7 +127,7 @@ class _StocklistState extends State<Stocklist> {
         },
         children: [
           for (int i = 0; i < inStockItems.length; i++)
-            CategoryListTile(
+            StockListTile(
               key: ValueKey(inStockItems[i]),
               items: inStockItems[i],
               index: i,

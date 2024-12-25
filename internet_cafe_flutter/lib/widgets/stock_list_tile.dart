@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/stock_item.dart';
 
-
 enum Mode { normal, selection }
 
-class CategoryListTile extends StatelessWidget {
+class StockListTile extends StatelessWidget {
   final StockItem items;
   final int index;
   final bool isSelected;
@@ -12,7 +11,7 @@ class CategoryListTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onLongPressed;
 
-  const CategoryListTile({
+  const StockListTile({
     super.key,
     required this.items,
     required this.index,
