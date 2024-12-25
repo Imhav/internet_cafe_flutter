@@ -13,8 +13,8 @@
             <mxPoint x="450" y="500" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="x8zRLUXHUi7RQanm5VWF-5" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="190" y="370" width="120" height="60" as="geometry" />
+        <mxCell id="x8zRLUXHUi7RQanm5VWF-5" value="Seat Screen" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="210" y="370" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="x8zRLUXHUi7RQanm5VWF-6" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" parent="1" source="x8zRLUXHUi7RQanm5VWF-3" target="x8zRLUXHUi7RQanm5VWF-7" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -22,8 +22,8 @@
             <mxPoint x="450" y="630" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="x8zRLUXHUi7RQanm5VWF-7" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="200" y="540" width="120" height="60" as="geometry" />
+        <mxCell id="x8zRLUXHUi7RQanm5VWF-7" value="Stock Screen&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="210" y="540" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
